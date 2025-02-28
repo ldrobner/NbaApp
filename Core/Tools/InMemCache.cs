@@ -56,7 +56,7 @@ public class InMemCache<TKey, TValue> {
     /// <param name="key"></param>
     /// <returns>A value of type TValue if the key exists in the LRU cache, otherwise null</returns>
     public TValue Get(TKey key) {
-        if(!this.Contains(key)) {
+        if(!Contains(key)) {
             return default;
         }
 
@@ -72,18 +72,18 @@ public class InMemCache<TKey, TValue> {
     /// <param name="key">a key of type TKey to be used to mark the entry</param>
     /// <param name="value">the value of type TValue to be stored at the key's location</param>
     public void Put(TKey key, TValue value) {
-        if(this.Contains(key)) {
+        if(Contains(key)) {
             ListNode old = lookupTable[key];
-            this.remove(old);
+            remove(old);
         }
         
         ListNode newNode = new ListNode(key, value);
         lookupTable.Add(key, newNode);
-        this.add(newNode);
+        add(newNode);
 
-        if(lookupTable.Count > this.capacity) {
-            ListNode deleteNode = this.head.next;
-            this.remove(deleteNode);
+        if(lookupTable.Count > capacity) {
+            ListNode deleteNode = head.next;
+            remove(deleteNode);
             lookupTable.Remove(deleteNode.key);
         }
     }

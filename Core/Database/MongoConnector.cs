@@ -22,31 +22,31 @@ public class MongoConnector {
 
     public MongoConnector(MongoClientSettings? settings) {
         if(settings == null) {
-            this.mongoClient = new MongoClient(this.settings);
+            mongoClient = new MongoClient(this.settings);
         } else {
             this.settings = settings;
-            this.mongoClient = new MongoClient(settings);
+            mongoClient = new MongoClient(settings);
         }
-        this.InMemDbCache = new InMemCache<string, IMongoDatabase>(5);
-        this.InMemCollectionCache = new InMemCache<string, IMongoCollection<BsonDocument>>(this.InMemDbCache.capacity * 5);
+        InMemDbCache = new InMemCache<string, IMongoDatabase>(5);
+        InMemCollectionCache = new InMemCache<string, IMongoCollection<BsonDocument>>(InMemDbCache.capacity * 5);
     }
     
     public MongoClientSettings getSettings() {
-        return this.settings;
+        return settings;
     }
 
     private IMongoDatabase GetDatabase(string dbName) {
         if(InMemDbCache.Contains(dbName)) {
-            return this.InMemDbCache.Get(dbName);
+            return InMemDbCache.Get(dbName);
         }
-        return this.mongoClient.GetDatabase(dbName);
+        return mongoClient.GetDatabase(dbName);
     }
 
     private IMongoCollection<BsonDocument> GetCollection(string dbName, string collectionName) {
         if(InMemCollectionCache.Contains(collectionName)) {
-            return this.InMemCollectionCache.Get(collectionName);
+            return InMemCollectionCache.Get(collectionName);
         }
-        IMongoDatabase db = this.GetDatabase(dbName);
+        IMongoDatabase db = GetDatabase(dbName);
         return db.GetCollection<BsonDocument>(collectionName);
     }
 
@@ -58,7 +58,7 @@ public class MongoConnector {
     /// <param name="filter">The filter used to lookup the document</param>
     /// <returns>A single document of type BsonDocument</returns>
     public BsonDocument GetDocument(string dbName, string collectionName, FilterDefinition<BsonDocument> filter) {
-        IMongoCollection<BsonDocument> collection = this.GetCollection(dbName, collectionName);
+        IMongoCollection<BsonDocument> collection = GetCollection(dbName, collectionName);
         return collection.Find(filter).FirstOrDefault();
     }
     
@@ -70,7 +70,7 @@ public class MongoConnector {
     /// <param name="filter">The filter used to lookup the document(s)</param>
     /// <returns>A list of doucments of type List<BsonDocument></returns>
     public List<BsonDocument> GetDocuments(string dbName, string collectionName, FilterDefinition<BsonDocument> filter) {
-        IMongoCollection<BsonDocument> collection = this.GetCollection(dbName, collectionName);
+        IMongoCollection<BsonDocument> collection = GetCollection(dbName, collectionName);
         return collection.Find(filter).ToList();
     }
 
@@ -81,7 +81,7 @@ public class MongoConnector {
     /// <param name="collectionName">The name of the collection</param>
     /// <param name="documents">The list of documents to be inserted into the collection</param>
     public void InsertDocuments(string dbName, string collectionName, List<BsonDocument> documents) {
-        IMongoCollection<BsonDocument> collection = this.GetCollection(dbName, collectionName);
+        IMongoCollection<BsonDocument> collection = GetCollection(dbName, collectionName);
         collection.InsertMany(documents);
     }
 
@@ -93,7 +93,7 @@ public class MongoConnector {
     /// <param name="filter">The filter to be used to select which documents to be updated</param>
     /// <param name="update">The update to be applied to selected documents</param>
     public void UpdateDocuments(string dbName, string collectionName, FilterDefinition<BsonDocument> filter, UpdateDefinition<BsonDocument> update) {
-        IMongoCollection<BsonDocument> collection = this.GetCollection(dbName, collectionName);
+        IMongoCollection<BsonDocument> collection = GetCollection(dbName, collectionName);
         collection.UpdateMany(filter, update);
     }
 
@@ -104,7 +104,7 @@ public class MongoConnector {
     /// <param name="collectionName">The name of the collection</param>
     /// <param name="filter">The filter to be used to select which documents to be deleted</param>
     public void DeleteDocuments(string dbName, string collectionName, FilterDefinition<BsonDocument> filter) {
-        IMongoCollection<BsonDocument> collection = this.GetCollection(dbName, collectionName);
+        IMongoCollection<BsonDocument> collection = GetCollection(dbName, collectionName);
         collection.DeleteMany(filter);
     }
 }
