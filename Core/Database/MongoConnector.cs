@@ -1,7 +1,7 @@
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Core.Configuration;
-
+using NbaApp.Core.Tools;
 
 namespace NbaApp.Core.Database;
 
@@ -17,8 +17,8 @@ public class MongoConnector {
     };
     private MongoClient mongoClient;
 
-    private Dictionary<string, IMongoDatabase> InMemDbCache;
-    private Dictionary<string, IMongoCollection<BsonDocument>> InMemCollectionCache;
+    private InMemCache<string, IMongoDatabase> InMemDbCache;
+    private InMemCache<string, IMongoCollection<BsonDocument>> InMemCollectionCache;
 
     public MongoConnector(MongoClientSettings? settings) {
         if(settings == null) {
@@ -27,6 +27,8 @@ public class MongoConnector {
             this.settings = settings;
             this.mongoClient = new MongoClient(settings);
         }
+        this.InMemDbCache = new InMemCache<string, IMongoDatabase>(5);
+        this.InMemCollectionCache = new InMemCache<string, IMongoCollection<BsonDocument>>(this.InMemDbCache.capacity * 5);
     }
     
     public MongoClientSettings getSettings() {
@@ -34,15 +36,15 @@ public class MongoConnector {
     }
 
     private IMongoDatabase GetDatabase(string dbName) {
-        if(InMemDbCache.ContainsKey(dbName)) {
-            return this.InMemDbCache[dbName];
+        if(InMemDbCache.Contains(dbName)) {
+            return this.InMemDbCache.Get(dbName);
         }
         return this.mongoClient.GetDatabase(dbName);
     }
 
     private IMongoCollection<BsonDocument> GetCollection(string dbName, string collectionName) {
-        if(InMemCollectionCache.ContainsKey(collectionName)) {
-            return this.InMemCollectionCache[collectionName];
+        if(InMemCollectionCache.Contains(collectionName)) {
+            return this.InMemCollectionCache.Get(collectionName);
         }
         IMongoDatabase db = this.GetDatabase(dbName);
         return db.GetCollection<BsonDocument>(collectionName);
