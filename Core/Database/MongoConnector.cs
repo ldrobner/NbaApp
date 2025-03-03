@@ -6,7 +6,7 @@ using NbaApp.Core.Tools;
 namespace NbaApp.Core.Database;
 
 public class MongoConnector {
-    private MongoClientSettings settings = new MongoClientSettings(){ // default is connect to localhost
+    private MongoClientSettings settings = new MongoClientSettings() { // default is connect to localhost
         Scheme = ConnectionStringScheme.MongoDB,
         Server = new MongoServerAddress("127.0.0.1", 27017),
         ConnectTimeout = new TimeSpan(0, 0, 60),
@@ -18,7 +18,7 @@ public class MongoConnector {
     private MongoClient mongoClient;
 
     private InMemCache<string, IMongoDatabase> InMemDbCache;
-    private InMemCache<string, IMongoCollection<BsonDocument>> InMemCollectionCache;
+    private InMemCache<string, IMongoCollection<dynamic>> InMemCollectionCache;
 
     public MongoConnector(MongoClientSettings? settings) {
         if(settings == null) {
@@ -28,28 +28,28 @@ public class MongoConnector {
             mongoClient = new MongoClient(settings);
         }
         InMemDbCache = new InMemCache<string, IMongoDatabase>(5);
-        InMemCollectionCache = new InMemCache<string, IMongoCollection<BsonDocument>>(InMemDbCache.capacity * 5);
+        InMemCollectionCache = new InMemCache<string, IMongoCollection<dynamic>>(InMemDbCache.capacity * 5);
     }
     
     public MongoClientSettings getSettings() {
         return settings;
     }
 
-    private IMongoDatabase GetDatabase(string dbName) {
+    public IMongoDatabase GetDatabase(string dbName) {
         if(InMemDbCache.Contains(dbName)) {
             return InMemDbCache.Get(dbName);
         }
         return mongoClient.GetDatabase(dbName);
     }
 
-    private IMongoCollection<BsonDocument> GetCollection(string dbName, string collectionName) {
+    public IMongoCollection<T> GetCollection<T>(string dbName, string collectionName) {
         if(InMemCollectionCache.Contains(collectionName)) {
-            return InMemCollectionCache.Get(collectionName);
+            return (IMongoCollection<T>)InMemCollectionCache.Get(collectionName);
         }
         IMongoDatabase db = GetDatabase(dbName);
-        return db.GetCollection<BsonDocument>(collectionName);
+        return db.GetCollection<T>(collectionName);
     }
-
+/*
     /// <summary>
     /// Gets a single document or object from the specified collection
     /// </summary>
@@ -107,4 +107,5 @@ public class MongoConnector {
         IMongoCollection<BsonDocument> collection = GetCollection(dbName, collectionName);
         collection.DeleteMany(filter);
     }
+*/
 }

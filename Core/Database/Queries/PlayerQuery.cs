@@ -1,32 +1,93 @@
+using MongoDB.Driver;
 using NbaApp.Core.Types;
 using NbaApp.Core.Types.Statistics;
 
 namespace NbaApp.Core.Database.Queries;
 
 public class PlayerQuery : Query {
-    public PlayerQuery(MongoConnector mongoConnector) : base (mongoConnector) {}
+    public PlayerQuery(MongoConnector mongoConnector, string? databaseName) : base (mongoConnector, databaseName) {}
+
     public List<Player> GetPlayers() {
-        return new List<Player>();
+        FilterDefinition<Player> filter = Builders<Player>.Filter.Empty;
+        IMongoCollection<Player> collection = mongoConnector.GetCollection<Player>(Database, "players");
+        return collection.Find(filter).ToList();
     }
+
     public Player GetPlayerById(string playerId) {
-        return new Player("", "", "", 0, 0, new DateOnly(), "", null, null, 0);
+        FilterDefinition<Player> filter = Builders<Player>.Filter.Eq("id", playerId);
+        IMongoCollection<Player> collection = mongoConnector.GetCollection<Player>(Database, "players");
+        return collection.Find(filter).FirstOrDefault();
     }
-    public List<Player> GetPlayerByTeam(TeamInfo team) {
-        return new List<Player>();
+
+    public List<BoxScore> GetBoxScoresByPlayerId(string playerId, DateOnly? start, DateOnly? end) {
+        FilterDefinitionBuilder<BoxScore> builder = Builders<BoxScore>.Filter;
+        FilterDefinition<BoxScore> filter = builder.Eq("pid", playerId);
+        if(start != null) {
+            filter &= builder.Gte("date", start);
+        }
+
+        if(end != null) {
+            filter &= builder.Lte("date", end);
+        }
+        
+        IMongoCollection<BoxScore> collection = mongoConnector.GetCollection<BoxScore>(Database, "box-scores");
+        return collection.Find(filter).ToList();
     }
-    public Totals GetTotalsById(string playerId) {
-        return new Totals(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+    public Totals GetTotalsById(string playerId, DateOnly? start, DateOnly? end) {
+        IMongoCollection<BoxScore> collection = mongoConnector.GetCollection<BoxScore>(Database, "box-scores");
+        FilterDefinitionBuilder<BoxScore> builder = Builders<BoxScore>.Filter;
+        FilterDefinition<BoxScore> filter = builder.Eq("pid", playerId);
+        if(start != null) {
+            filter &= builder.Gte("date", start);
+        }
+
+        if(end != null) {
+            filter &= builder.Lte("date", end);
+        }
+
+        PipelineDefinition<BoxScore, Totals> pipeline = new EmptyPipelineDefinition<BoxScore>()
+            .Match(filter)
+            .Group( 
+                tot => tot.PlayerId,
+                tot => new Totals(
+                    tot.Key,
+                    tot.Sum(gl => gl.MinutesPlayed),
+                    tot.Sum(gl => gl.FieldGoalsMade),
+                    tot.Sum(gl => gl.FieldGoalsAttempted),
+                    tot.Sum(gl => gl.ThreePointersMade),
+                    tot.Sum(gl => gl.ThreePointersAttempted),
+                    tot.Sum(gl => gl.FreeThrowsMade),
+                    tot.Sum(gl => gl.FreeThrowsAttempted),
+                    tot.Sum(gl => gl.OffensiveRebounds),
+                    tot.Sum(gl => gl.DefensiveRebounds),
+                    tot.Sum(gl => gl.Assists),
+                    tot.Sum(gl => gl.Steals),
+                    tot.Sum(gl => gl.Blocks),
+                    tot.Sum(gl => gl.Turnovers),
+                    tot.Sum(gl => gl.PersonalFouls),
+                    tot.Sum(gl => gl.Points),
+                    tot.Sum(gl => gl.PlusMinus),
+                    tot.Sum(gl => gl.DidNotPlays),
+                    tot.Sum(gl => gl.Starts),
+                    tot.Sum(gl => gl.Wins),
+                    tot.Sum(gl => gl.Overtimes)
+                )
+            );
+        return collection.Aggregate(pipeline).FirstOrDefault();
     }
-    public List<Shot> GetShotsById(string playerId) {
-        return new List<Shot>();
-    }
-    public List<Shot> GetShotsFromGameById(string playerId, DateOnly gameDate) {
-        return new List<Shot>();
-    }
-    public List<Play> GetPlaysById(string playerId) {
-        return new List<Play>();
-    }
-    public List<Play> GetPlaysFromGameById(string playerId, DateOnly gameDate) {
-        return new List<Play>();
+
+    public List<Shot> GetShotsById(string playerId, DateOnly? start, DateOnly? end) {
+        IMongoCollection<Shot> collection = mongoConnector.GetCollection<Shot>(Database, "shot-charts");
+        FilterDefinitionBuilder<Shot> builder = Builders<Shot>.Filter;
+        FilterDefinition<Shot> filter = builder.Eq("pid", playerId);
+        if(start != null) {
+            filter &= builder.Gte("date", start);
+        }
+
+        if(end != null) {
+            filter &= builder.Lte("date", end);
+        }
+        return collection.Find(filter).ToList();
     }
 }
