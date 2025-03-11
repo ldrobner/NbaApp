@@ -1,48 +1,65 @@
-using System.Globalization;
+using MongoDB.Bson.Serialization.Attributes;
+using NbaApp.Core.Types.Statistics;
 
 namespace NbaApp.Core.Types;
 
 public class Player {
-    private string _id;
-    public string Id { get => _id; set => _id = value; }
+    [BsonElement("id")]
+    public string PlayerId { get => _playerId; set => _playerId = value; }
+    private string _playerId;
 
-    private string _firstName;
+    [BsonElement("firstName")]
     public string FirstName { get => _firstName; set => _firstName = value; }
+    private string _firstName;
 
-    private string _lastName;
+    [BsonElement("lastName")]
     public string LastName { get => _lastName; set => _lastName = value; }
+    private string _lastName;
 
-    private float _height;
-    public float Height { get => _height; set => _height = value; }
+    [BsonElement("height")]
+    public double Height { get => _height; set => _height = value; }
+    private double _height;
 
-    private float _weight;
-    public float Weight { get => _weight ; set => _weight = value; }
+    [BsonElement("weight")]
+    public double Weight { get => _weight ; set => _weight = value; }
+    private double _weight;
 
-    private DateOnly _birthday;
+    [BsonElement("birthday")]
     public DateOnly Birthday { get => _birthday ; set => _birthday = value; }
+    private DateOnly _birthday;
 
-    private string _nationality;
+    [BsonElement("nationality")]
     public string Nationality { get => _nationality; set => _nationality = value; }
+    private string _nationality;
 
-    private string? _college;
+    [BsonElement("college")]
     public string? College { get => _college; set => _college = value; }
+    private string? _college;
 
-    private int? _draftPick;
+    [BsonElement("draftPick")]
     public int? DraftPick { get => _draftPick; set{if(0 < value || value < 61) {_draftPick = value;}} }
+    private int? _draftPick;
 
-    private int _experience;
+    [BsonElement("experience")]
     public int Experience { get => _experience; set {if(value > 0) {_experience = value;} else {_experience = 0;}} }
+    private int _experience;
+
+    public ShotChart ShotChart { get => _shotChart; }
+    private readonly ShotChart _shotChart;
+
+    public Totals? Totals { get => _totals; set => _totals = value; }
+    private Totals? _totals;
     
     public Player(
-        string id,
+        string playerId,
         string firstName, string lastName,
-        float height, float weight,
+        double height, double weight,
         DateOnly birthday,
         string nationality, string? college,
         int? draftPick,
         int experience
     ) {
-        _id = id;
+        _playerId = playerId;
         _firstName = firstName;
         _lastName = lastName;
         _height = height;
@@ -52,5 +69,6 @@ public class Player {
         _college = college;
         _draftPick = draftPick;
         _experience = experience;
+        _shotChart = new ShotChart();
     }
 }
