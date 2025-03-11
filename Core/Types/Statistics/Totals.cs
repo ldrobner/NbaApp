@@ -1,70 +1,101 @@
+using MongoDB.Bson.Serialization.Attributes;
+
 namespace NbaApp.Core.Types.Statistics;
 
-public class Totals {    
-    private float _minutesPlayed;
-    public float MinutesPlayed { get => _minutesPlayed; set => _minutesPlayed = value;}
+public class Totals {
+    [BsonElement("pid")]
+    public string PlayerId { get => _playerId; set => _playerId = value; }
+    private string _playerId;
 
-    private int _fieldGoalsMade;
+    [BsonElement("mp")]
+    public double MinutesPlayed { get => _minutesPlayed; set => _minutesPlayed = value;}
+    private double _minutesPlayed;
+
+    [BsonElement("fg")]
     public int FieldGoalsMade { get => _fieldGoalsMade; set => _fieldGoalsMade = value;}
+    private int _fieldGoalsMade;
 
-    private int _fieldGoalsAttempted;
+    [BsonElement("fga")]
     public int FieldGoalsAttempted { get => _fieldGoalsAttempted ; set => _fieldGoalsAttempted = value;}
+    private int _fieldGoalsAttempted;
 
-    private int _threePointersMade;
+    [BsonElement("fg3")]
     public int ThreePointersMade { get => _threePointersMade; set => _threePointersMade = value;}
+    private int _threePointersMade;
 
-    private int _threePointersAttempted;
+    [BsonElement("fg3a")]
     public int ThreePointersAttempted { get => _threePointersAttempted ; set => _threePointersAttempted = value;}
+    private int _threePointersAttempted;
 
-    private int _freeThrowsMade;
+    [BsonElement("ft")]
     public int FreeThrowsMade { get => _freeThrowsMade; set => _freeThrowsMade = value;}
+    private int _freeThrowsMade;
 
-    private int _freeThrowsAttempted;
+    [BsonElement("fta")]
     public int FreeThrowsAttempted { get => _freeThrowsAttempted; set => _freeThrowsAttempted = value;}
+    private int _freeThrowsAttempted;
 
-    private int _offensiveRebounds;
+    [BsonElement("orb")]
     public int OffensiveRebounds { get => _offensiveRebounds; set => _offensiveRebounds = value;}
+    private int _offensiveRebounds;
 
-    private int _defensiveRebounds;
+    [BsonElement("drb")]
     public int DefensiveRebounds { get => _defensiveRebounds; set => _defensiveRebounds = value;}
+    private int _defensiveRebounds;
 
     public int TotalRebounds { get {return _offensiveRebounds + _defensiveRebounds;}}
 
-    private int _assists;
+    [BsonElement("ast")]
     public int  Assists { get => _assists; set => _assists = value;}
+    private int _assists;
 
-    private int _steals;
+    [BsonElement("stl")]
     public int Steals { get => _steals; set => _steals = value;}
+    private int _steals;
 
-    private int _blocks;
+    [BsonElement("blk")]
     public int Blocks { get => _blocks; set => _blocks = value;}
+    private int _blocks;
 
-    private int _turnovers;
+    [BsonElement("tov")]
     public int Turnovers { get => _turnovers; set => _turnovers = value;}
+    private int _turnovers;
 
-    private int _personalFouls;
+    [BsonElement("pf")]
     public int PersonalFouls { get => _personalFouls; set => _personalFouls = value;}
+    private int _personalFouls;
 
-    private int _points;
+    [BsonElement("pts")]
     public int Points { get => _points; set => _points = value; }
+    private int _points;
 
-    private float _plusMinus;
-    public float PlusMinus { get => _plusMinus; set => _plusMinus = value;}
+    [BsonElement("game_score")]
+    public double GameScore { get => _gameScore; set => _gameScore = value;}
+    private double _gameScore;
 
-    private int _didNotPlays;
+    [BsonElement("plus_minus")]
+    public double PlusMinus { get => _plusMinus; set => _plusMinus = value;}
+    private double _plusMinus;
+
+    [BsonElement("dnp")]
     public int DidNotPlays { get => _didNotPlays; set => _didNotPlays = value;}
+    private int _didNotPlays;
 
-    private int _starts;
+    [BsonElement("gs")]
     public int Starts { get => _starts; set => _starts = value;}
+    private int _starts;
 
-    private int _wins;
+    [BsonElement("win")]
     public int Wins { get => _wins; set => _wins = value;}
+    private int _wins;
 
-    private int _overtimes;
+    [BsonElement("overtime")]
     public int Overtimes { get => _overtimes; set => _overtimes = value;}
+    private int _overtimes;
 
     public Totals(
-        float minutesPlayed,
+        string playerId,
+        double minutesPlayed,
         int fieldGoalsMade, int fieldGoalsAttempted,
         int threePointersMade, int threePointersAttempted,
         int freeThrowsMade, int freeThrowsAttempted,
@@ -73,10 +104,11 @@ public class Totals {
         int steals, int blocks,
         int turnovers, int personalFouls,
         int points,
-        float plusMinus,
+        double plusMinus,
         int didNotPlays, int starts,
         int wins, int overtimes
     ) {
+        _playerId = playerId;
         _minutesPlayed = minutesPlayed;
         _fieldGoalsMade = fieldGoalsMade;
         _fieldGoalsAttempted = fieldGoalsAttempted;
