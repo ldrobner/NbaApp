@@ -1,4 +1,4 @@
-namespace NbaApp.Core.Types;
+namespace NbaApp.Core.Types.ShotChart;
 
 public class Shot {
     private int _top;
