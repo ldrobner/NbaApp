@@ -1,11 +1,11 @@
 namespace NbaApp.Core.Types;
 
 public class Shot {
-    private float _top;
-    public float Top { get => _top; set => _top = value; }
+    private int _top;
+    public int Top { get => _top; set => _top = value; }
 
-    private float _left;
-    public float Left { get => _left; set => _left = value; }
+    private int _left;
+    public int Left { get => _left; set => _left = value; }
 
     private int _distance;
     public int Distance { get => _distance; set => _distance = value; }
@@ -16,8 +16,8 @@ public class Shot {
     private int _quarter;
     public int Quater { get => _quarter; set => _quarter = value; }
 
-    private float _clock;
-    public float Clock { get => _clock; set => _clock = value; }
+    private double _clock;
+    public double Clock { get => _clock; set => _clock = value; }
 
     private DateOnly _date;
     public DateOnly Date { get => _date; set => _date = value; }
@@ -29,9 +29,9 @@ public class Shot {
     public string? Assistor { get => _assistor; set => _assistor = value; }
 
     public Shot(
-        float top, float left, int distance,
+        int top, int left, int distance,
         bool make,
-        int quarter, float clock,
+        int quarter, double clock,
         DateOnly date,
         bool assisted, string assistor
     ) {
