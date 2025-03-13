@@ -1,17 +1,17 @@
 namespace NbaApp.Core.Types.ShotChart;
 
-public class ShotChartZones {
+public class ShotChartZones : ShotChartCollection {
 
     public ShotChartFragmentZone Total { get =>
         new("Total", new ShotChartFragmentZone[]{TwoPointers, ThreePointers});
     }
 
     public ShotChartFragmentZone TwoPointers { get =>
-        new("TwoPointers", new ShotChartFragmentZone[]{_dunksAndLayups, MidRange});
+        new("TwoPointers", new ShotChartFragmentZone[]{_layupsAndDunks, MidRange});
     }
 
-    public ShotChartFragmentZone DunksAndLayups {get => _dunksAndLayups; }
-    private readonly ShotChartFragmentZone _dunksAndLayups;
+    public ShotChartFragmentZone LayupsAndDunks {get => _layupsAndDunks; }
+    private readonly ShotChartFragmentZone _layupsAndDunks;
     
     public ShotChartFragmentZone MidRange { get => 
         new("MidRange", new ShotChartFragmentZone[]{ShortMidRange, LongMidRange});
@@ -70,37 +70,37 @@ public class ShotChartZones {
     private readonly ShotChartFragmentZone _longMidRangeBaselineRight;
 
     public ShotChartFragmentZone ThreePointers { get =>
-        new("ThreePointers", new ShotChartFragmentZone[]{CornerThrees, AboveTheBreakThrees});
+        new("ThreePointers", new ShotChartFragmentZone[]{ThreePointerCorner, ThreePointerAboveTheBreak});
     }
 
-    public ShotChartFragmentZone CornerThrees { get =>
-        new("CornerThrees", new ShotChartFragmentZone[]{_leftCornerThreePointer, _rightCornerThreePointer});
+    public ShotChartFragmentZone ThreePointerCorner { get =>
+        new("CornerThrees", new ShotChartFragmentZone[]{_threePointerCornerLeft, _threePointerCornerRight});
     }
 
-    public ShotChartFragmentZone AboveTheBreakThrees { get =>
-        new("AboveTheBreakThrees", new ShotChartFragmentZone[]{_leftWingThreePointer, _centerThreePointer, _rightWingThreePointer});
+    public ShotChartFragmentZone ThreePointerAboveTheBreak { get =>
+        new("AboveTheBreakThrees", new ShotChartFragmentZone[]{_threePointerWingLeft, _threePointerCenter, _threePointerWingRight});
     }
 
-    public ShotChartFragmentZone LeftCornerThreePointer { get => _leftCornerThreePointer; }
-    private readonly ShotChartFragmentZone _leftCornerThreePointer;
+    public ShotChartFragmentZone ThreePointerCornerLeft { get => _threePointerCornerLeft; }
+    private readonly ShotChartFragmentZone _threePointerCornerLeft;
 
-    public ShotChartFragmentZone LeftWingThreePointer { get => _leftWingThreePointer; }
-    private readonly ShotChartFragmentZone _leftWingThreePointer;
+    public ShotChartFragmentZone ThreePointerWingLeft { get => _threePointerWingLeft; }
+    private readonly ShotChartFragmentZone _threePointerWingLeft;
 
-    public ShotChartFragmentZone CenterThreePointer { get => _centerThreePointer; }
-    private readonly ShotChartFragmentZone _centerThreePointer;
+    public ShotChartFragmentZone ThreePointerCenter { get => _threePointerCenter; }
+    private readonly ShotChartFragmentZone _threePointerCenter;
 
-    public ShotChartFragmentZone RightWingThreePointer { get => _rightWingThreePointer; }
-    private readonly ShotChartFragmentZone _rightWingThreePointer;
+    public ShotChartFragmentZone ThreePointerWingRight { get => _threePointerWingRight; }
+    private readonly ShotChartFragmentZone _threePointerWingRight;
 
-    public ShotChartFragmentZone RightCornerThreePointer { get => _rightCornerThreePointer; }
-    private readonly ShotChartFragmentZone _rightCornerThreePointer;
+    public ShotChartFragmentZone ThreePointerCornerRight { get => _threePointerCornerRight; }
+    private readonly ShotChartFragmentZone _threePointerCornerRight;
 
     public ShotChartFragmentZone HeaveOrLongThree { get => _heaveOrLongThree; }
     private readonly ShotChartFragmentZone _heaveOrLongThree;
 
-    public ShotChartZones() {
-        _dunksAndLayups = new ShotChartFragmentZone(2, "DunksAndLayups");
+    public ShotChartZones() : base() {
+        _layupsAndDunks = new ShotChartFragmentZone(2, "LayupsAndDunks");
         _shortMidRangeLeft = new ShotChartFragmentZone(2, "ShortMidRangeLeft");
         _shortMidRangeCenter = new ShotChartFragmentZone(2, "ShortMidRangeCenter");
         _shortMidRangeRight = new ShotChartFragmentZone(2, "ShortMidRangeRight");
@@ -110,12 +110,34 @@ public class ShotChartZones {
         _longMidRangeCenter = new ShotChartFragmentZone(2, "LongMidRangeCenter");
         _longMidRangeElbowRight = new ShotChartFragmentZone(2, "LongMidRangeElbowRight");
         _longMidRangeWingRight = new ShotChartFragmentZone(2, "LongMidRangeWingRight");
-        _longMidRangeBaselineRight = new ShotChartFragmentZone(2, "LongMidRangebaselineRight");
-        _leftCornerThreePointer = new ShotChartFragmentZone(3, "LeftCornerThreePointer");
-        _leftWingThreePointer = new ShotChartFragmentZone(3, "LeftWingThreePointer");
-        _centerThreePointer = new ShotChartFragmentZone(3, "CenterThreePointer");
-        _rightWingThreePointer = new ShotChartFragmentZone(3, "RightWingThreePointer");
-        _rightCornerThreePointer = new ShotChartFragmentZone(3, "RightCornerThreePointer");
+        _longMidRangeBaselineRight = new ShotChartFragmentZone(2, "LongMidRangeBaselineRight");
+        _threePointerCornerLeft = new ShotChartFragmentZone(3, "ThreePointerCornerLeft");
+        _threePointerWingLeft = new ShotChartFragmentZone(3, "ThreePointerWingLeft");
+        _threePointerCenter = new ShotChartFragmentZone(3, "ThreePointerCenter");
+        _threePointerWingRight = new ShotChartFragmentZone(3, "ThreePointerWingRight");
+        _threePointerCornerRight = new ShotChartFragmentZone(3, "ThreePointerCornerRight");
         _heaveOrLongThree = new ShotChartFragmentZone(3, "HeaveOrLongThree");
+    }
+
+    public override void Update(Shot shot)
+    {
+        if(IsLayupOrDunk(shot.Left, shot.Top)) { _layupsAndDunks.AddShot(shot); } 
+        else if(IsShortMidRangeLeft(shot.Left, shot.Top)) { _shortMidRangeLeft.AddShot(shot); }
+        else if(IsShortMidRangeCenter(shot.Left, shot.Top)) { _shortMidRangeCenter.AddShot(shot); }
+        else if(IsShortMidRangeRight(shot.Left, shot.Top)) { _shortMidRangeRight.AddShot(shot); } 
+        else if(IsLongMidRangeBaselineLeft(shot.Left, shot.Top)) { _longMidRangeBaselineLeft.AddShot(shot); }
+        else if(IsLongMidRangeWingLeft(shot.Left, shot.Top)) { _longMidRangeWingLeft.AddShot(shot); }
+        else if(IsLongMidRangeElbowLeft(shot.Left, shot.Top)) { _longMidRangeElbowLeft.AddShot(shot); }
+        else if(IsLongMidRangeCenter(shot.Left, shot.Top)) { _longMidRangeCenter.AddShot(shot); }
+        else if(IsLongMidRangeElbowRight(shot.Left, shot.Top)) { _longMidRangeElbowRight.AddShot(shot); }
+        else if(IsLongMidRangeWingRight(shot.Left, shot.Top)) { _longMidRangeWingRight.AddShot(shot); }
+        else if(IsLongMidRangeBaselineRight(shot.Left, shot.Top)) { _longMidRangeBaselineRight.AddShot(shot); }
+        else if(IsThreePointerCornerLeft(shot.Left, shot.Top)) { _threePointerCornerLeft.AddShot(shot); }
+        else if(IsThreePointerWingLeft(shot.Left, shot.Top)) { _threePointerWingLeft.AddShot(shot); }
+        else if(IsThreePointerCenter(shot.Left, shot.Top)) { _threePointerCenter.AddShot(shot); }
+        else if(IsThreePointerWingRight(shot.Left, shot.Top)) { _threePointerWingRight.AddShot(shot); }
+        else if(IsThreePointerCornerRight(shot.Left, shot.Top)) { _threePointerCornerRight.AddShot(shot); }
+        else if(IsThreePointerHeave(shot.Left, shot.Top)) { _heaveOrLongThree.AddShot(shot); }
+        else { throw new Exception($"Shot with ix {shot.Left} and jx {shot.Top} does not fall within a zone!"); }
     }
 }
