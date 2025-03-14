@@ -6,9 +6,9 @@ public abstract class ShotChartCollection : Observer<Shot> {
 
     #region Constants
 
-    private static int[] BasketPosition = new int[2]{250, 55};
-    private static int[] LeftElbowPosition = new int[2]{170, 190};
-    private static int[] RightElbowPosition = new int[2]{328, 190};
+    private static (int x, int y) BasketPosition = (250, 55);
+    private static (int x, int y) LeftElbowPosition = (170, 190);
+    private static (int x, int y) RightElbowPosition = (328, 190);
 
     #endregion
 
@@ -39,32 +39,32 @@ public abstract class ShotChartCollection : Observer<Shot> {
     }
 
     protected static bool IsLayupOrDunk(int ix, int jx) {
-        double distance = GetDistance(ix, jx, BasketPosition[0], BasketPosition[1]);
+        double distance = GetDistance(ix, jx, BasketPosition.x, BasketPosition.y);
         return distance <= 3;
     }
 
     protected static bool IsShortMidRange(int ix, int jx) {
-        double distance = GetDistance(ix, jx, BasketPosition[0], BasketPosition[1]);
+        double distance = GetDistance(ix, jx, BasketPosition.x, BasketPosition.y);
         return 3 < distance && distance < 8.2;
     }
 
     protected static bool IsShortMidRangeLeft(int ix, int jx) {
-        double angle = GetAngle(ix-BasketPosition[0],jx-BasketPosition[1]);
+        double angle = GetAngle(ix-BasketPosition.x,jx-BasketPosition.y);
         return IsShortMidRange(ix, jx) && -90 <= angle && angle <= -45;
     }
 
     protected static bool IsShortMidRangeCenter(int ix, int jx) {
-        double angle = GetAngle(ix-BasketPosition[0],jx-BasketPosition[1]);
+        double angle = GetAngle(ix-BasketPosition.x,jx-BasketPosition.y);
         return IsShortMidRange(ix, jx) && -45 < angle && angle < 45;
     }
 
     protected static bool IsShortMidRangeRight(int ix, int jx) {
-        double angle = GetAngle(ix-BasketPosition[0],jx-BasketPosition[1]);
+        double angle = GetAngle(ix-BasketPosition.x,jx-BasketPosition.y);
         return IsShortMidRange(ix, jx) && 45 <= angle && angle <= 90;
     }
 
     protected static bool IsTwoPointer(int ix, int jx) {
-        double distance = GetDistance(ix, jx, BasketPosition[0], BasketPosition[1]);
+        double distance = GetDistance(ix, jx, BasketPosition.x, BasketPosition.y);
         return (jx < 140 && distance <= 22) || (140 <= jx && distance <= 23.75);
     }
 
@@ -73,7 +73,7 @@ public abstract class ShotChartCollection : Observer<Shot> {
     }
 
     protected static bool IsLongMidRange(int ix, int jx) {
-        double distance = GetDistance(ix, jx, BasketPosition[0], BasketPosition[1]);
+        double distance = GetDistance(ix, jx, BasketPosition.x, BasketPosition.y);
         return 8.2 <= distance && ((jx < 140 && distance <= 22) || (140 <= jx && distance <= 23.75));
     }
     protected static bool IsLongMidRangeBaselineLeft(int ix, int jx) {
@@ -101,13 +101,13 @@ public abstract class ShotChartCollection : Observer<Shot> {
     }
 
     protected static bool IsLongMidRangeElbowLeft(int ix, int jx) {
-        double distance = GetDistance(ix, jx, LeftElbowPosition[0], LeftElbowPosition[1]);
+        double distance = GetDistance(ix, jx, LeftElbowPosition.x, LeftElbowPosition.y);
         return distance < 3;
     }
 
 
     protected static bool IsLongMidRangeElbowRight(int ix, int jx) {
-        double distance = GetDistance(ix, jx, RightElbowPosition[0], RightElbowPosition[1]);
+        double distance = GetDistance(ix, jx, RightElbowPosition.x, RightElbowPosition.y);
         return distance < 3;
     }
 
@@ -128,7 +128,7 @@ public abstract class ShotChartCollection : Observer<Shot> {
     }
 
     protected static bool IsThreePointerHeave(int ix, int jx) {
-        return 33 < GetDistance(ix, jx, BasketPosition[0], BasketPosition[1]);
+        return 33 < GetDistance(ix, jx, BasketPosition.x, BasketPosition.y);
     }
 
     #endregion
