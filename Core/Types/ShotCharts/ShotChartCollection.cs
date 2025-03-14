@@ -1,6 +1,6 @@
 using NbaApp.Core.Tools.Observer;
 
-namespace NbaApp.Core.Types.ShotChart;
+namespace NbaApp.Core.Types.ShotCharts;
 
 public abstract class ShotChartCollection : Observer<Shot> {
 

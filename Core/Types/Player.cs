@@ -1,4 +1,5 @@
 using MongoDB.Bson.Serialization.Attributes;
+using NbaApp.Core.Types.ShotCharts;
 using NbaApp.Core.Types.Statistics;
 
 namespace NbaApp.Core.Types;

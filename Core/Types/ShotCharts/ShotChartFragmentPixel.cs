@@ -1,4 +1,4 @@
-namespace NbaApp.Core.Types.ShotChart;
+namespace NbaApp.Core.Types.ShotCharts;
 
 public class ShotChartFragmentPixel : ShotChartFragment {
 

@@ -1,4 +1,4 @@
-namespace NbaApp.Core.Types.ShotChart;
+namespace NbaApp.Core.Types.ShotCharts;
 
 public abstract class ShotChartFragment {
     public ShotChartFragmentType Type { get => _type; }

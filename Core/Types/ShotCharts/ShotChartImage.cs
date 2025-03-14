@@ -1,4 +1,4 @@
-namespace NbaApp.Core.Types.ShotChart;
+namespace NbaApp.Core.Types.ShotCharts;
 
 public class ShotChartImage : ShotChartCollection {
     private readonly int _width = 500;
