@@ -1,37 +1,37 @@
-using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Core.Configuration;
 using NbaApp.Core.Tools;
 
 namespace NbaApp.Core.Database;
 
-public class MongoConnector {
-    private MongoClientSettings settings = new MongoClientSettings() { // default is connect to localhost
-        Scheme = ConnectionStringScheme.MongoDB,
-        Server = new MongoServerAddress("127.0.0.1", 27017),
-        ConnectTimeout = new TimeSpan(0, 0, 60),
-        UseTls = true,
-        DirectConnection = true,
-        ServerSelectionTimeout = new TimeSpan(0, 0, 2),
-        ApplicationName = "NbaWebApp"
-    };
-    private MongoClient mongoClient;
+public class MongoConnector : IMongoConnector {
+    private readonly string DatabaseConnectionSettings = "DatabaseInformation";
+    private readonly MongoClientSettings settings;
+    private readonly MongoClient mongoClient;
+    private readonly InMemCache<string, IMongoDatabase> InMemDbCache;
+    private readonly InMemCache<string, IMongoCollection<dynamic>> InMemCollectionCache;
 
-    private InMemCache<string, IMongoDatabase> InMemDbCache;
-    private InMemCache<string, IMongoCollection<dynamic>> InMemCollectionCache;
-
-    public MongoConnector(MongoClientSettings? settings) {
-        if(settings == null) {
-            mongoClient = new MongoClient(this.settings);
-        } else {
-            this.settings = settings;
-            mongoClient = new MongoClient(settings);
-        }
+    public MongoConnector(IConfiguration configuration) {
+        IConfigurationSection dbConnectionSettings = configuration.GetSection(DatabaseConnectionSettings);
+        settings = new() {
+            Scheme = dbConnectionSettings.GetValue<string>("Scheme").Equals("mongodb") ? 
+                ConnectionStringScheme.MongoDB : 
+                ConnectionStringScheme.MongoDBPlusSrv,
+            Server = new MongoServerAddress(
+                dbConnectionSettings.GetValue<string>("SeverAddress"), 
+                dbConnectionSettings.GetValue<int>("ServerPort")),
+            ConnectTimeout = new TimeSpan(0,0,dbConnectionSettings.GetValue<int>("ConnectionTimeoutSeconds")),
+            UseTls = dbConnectionSettings.GetValue<bool>("UseTls"),
+            DirectConnection = dbConnectionSettings.GetValue<bool>("DirectConnection"),
+            ServerSelectionTimeout = new TimeSpan(0,0,dbConnectionSettings.GetValue<int>("ServerSelectionTimeoutSeconds")),
+            ApplicationName = dbConnectionSettings.GetValue<string>("ApplicationName")
+        };
+        mongoClient = new MongoClient(settings);
         InMemDbCache = new InMemCache<string, IMongoDatabase>(5);
         InMemCollectionCache = new InMemCache<string, IMongoCollection<dynamic>>(InMemDbCache.capacity * 5);
     }
     
-    public MongoClientSettings getSettings() {
+    public MongoClientSettings GetSettings() {
         return settings;
     }
 
