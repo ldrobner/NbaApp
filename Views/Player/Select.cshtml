@@ -2,11 +2,10 @@
 <ul>
     @foreach (var player in Model) {
         <li>
-            <h4></h4>
-            <p></p>
-            <p></p>
-            <p></p>
-            <a asp-controller="Player" asp-action="Index">Select</a>
+            <h4>@player.FirstName @player.LastName</h4>
+            <p><strong>Experience: </strong>@player.Experience</p>
+            <p><strong>Nationality: </strong> @player.Nationality, <strong>College: </strong>@player.College</p>
+            <a asp-controller="Player" asp-action="Index" asp-route-id="@player.PlayerId">Select</a>
         </li>
     }
 </ul>
