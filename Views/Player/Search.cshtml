@@ -9,8 +9,10 @@
     <br>
     <label for="fyear">Year:</label>
     <select id="fyear" name="year">
-        <option>2024-25</option>
-        <option>2023-24</option>
+        @foreach(var opt in (IEnumerable<string>)ViewData["Databases"]) 
+        {
+            <option>@opt</option>
+        }
     </select>
     <br>
     <input type="submit">

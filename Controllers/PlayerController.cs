@@ -7,9 +7,7 @@ using NbaApp.Models;
 public class PlayerController : Controller
 {
     private readonly ILogger<PlayerController> _logger;
-
     private readonly MongoConnector _mongoConnector;
-
     private readonly PlayerQuery _playerQuery;
 
     public PlayerController(IConfiguration configuration, ILogger<PlayerController> logger, MongoConnector mongoConnector)
@@ -36,6 +34,7 @@ public class PlayerController : Controller
     public IActionResult Search()
     {
         ViewData["Title"] = "Player Search";
+        ViewData["Databases"] = _mongoConnector.DatabaseNames;
         return View();
     }
 

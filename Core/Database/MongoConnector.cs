@@ -1,32 +1,27 @@
+using System.Text.RegularExpressions;
 using MongoDB.Driver;
 using MongoDB.Driver.Core.Configuration;
 using NbaApp.Core.Tools;
 
 namespace NbaApp.Core.Database;
 
-public class MongoConnector : IMongoConnector {
+public class MongoConnector {
     private readonly string DatabaseConnectionSettings = "DatabaseInformation";
     private readonly MongoClientSettings settings;
     private readonly MongoClient mongoClient;
 
+    public IEnumerable<string> DatabaseNames { get => _databaseNames; }
+    private readonly IEnumerable<string> _databaseNames;
+
     public MongoConnector(IConfiguration configuration) {
         IConfigurationSection dbConnectionSettings = configuration.GetSection(DatabaseConnectionSettings);
-        /*settings = new() {
-            Scheme = dbConnectionSettings.GetValue<string>("Scheme").Equals("mongodb") ? 
-                ConnectionStringScheme.MongoDB : 
-                ConnectionStringScheme.MongoDBPlusSrv,
-            Server = new MongoServerAddress(
-                dbConnectionSettings.GetValue<string>("ServerAddress"), 
-                dbConnectionSettings.GetValue<int>("ServerPort")),
-            ConnectTimeout = new TimeSpan(0,0,dbConnectionSettings.GetValue<int>("ConnectionTimeoutSeconds")),
-            UseTls = dbConnectionSettings.GetValue<bool>("UseTls"),
-            DirectConnection = dbConnectionSettings.GetValue<bool>("DirectConnection"),
-            ServerSelectionTimeout = new TimeSpan(0,0,dbConnectionSettings.GetValue<int>("ServerSelectionTimeoutSeconds")),
-            ApplicationName = dbConnectionSettings.GetValue<string>("ApplicationName")
-        };
-        mongoClient = new MongoClient(settings);
-        */
-        mongoClient = new MongoClient(dbConnectionSettings.GetValue<string>("ConnectionString"));
+        string connectionString = dbConnectionSettings.GetValue<string>("ConnectionString");
+        settings = MongoClientSettings.FromConnectionString(connectionString);
+        mongoClient = new MongoClient(connectionString);
+        
+        List<string> databaseNames = mongoClient.ListDatabaseNames().ToList();
+        Regex dbNameRegex = new Regex(@"[0-9]{4}-[0-9]{2}");
+        _databaseNames = databaseNames.Where( dbName => dbNameRegex.IsMatch(dbName));
     }
     
     public MongoClientSettings GetSettings() {
