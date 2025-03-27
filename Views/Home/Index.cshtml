@@ -1,31 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
-    void RenderImageCard(string imgSrc, string prompt) {
-        <div class="ImageCard col-md-auto">
-            <img class="ImageCard-front" src="@Url.Content(imgSrc)" alt="Image Here"/>
-            <h3 class="ImageCard-back">@prompt</h3>
-        </div>
-    }
 }
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
-    <div class="container-fluid">
-        <div class="row g-0 justify-content-center" id="row-1">
-        @{
-            RenderImageCard("~/images/one.png","A large sprawling city seen from above");
-            RenderImageCard("~/images/two.png","A lonley cabin in the woods");
-            RenderImageCard("~/images/three.png","An old overgrown stone temple");
-            RenderImageCard("~/images/four.png","An old truss bridge over a slow flowing river in the woods");
-        }
-        </div>
-        <div class="row g-0 justify-content-center" id="row-2">
-        @{
-            RenderImageCard("~/images/one.png","A large sprawling city seen from above");
-            RenderImageCard("~/images/two.png","A lonley cabin in the woods");
-            RenderImageCard("~/images/three.png","An old overgrown stone temple");
-            RenderImageCard("~/images/four.png","An old truss bridge over a slow flowing river in the woods");
-        }
-        </div>
-    </div>
 </div>
