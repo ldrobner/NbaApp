@@ -1,38 +1,50 @@
+using MongoDB.Bson.Serialization.Attributes;
+
 namespace NbaApp.Core.Types.ShotCharts;
 
+[BsonIgnoreExtraElements]
 public class Shot {
-    private int _top;
+    
+    [BsonElement("top")]
     public int Top { get => _top; set => _top = value; }
-
-    private int _left;
+    private int _top;
+    
+    [BsonElement("left")]
     public int Left { get => _left; set => _left = value; }
+    private int _left;
 
-    private int _distance;
+    [BsonElement("distance")]
     public int Distance { get => _distance; set => _distance = value; }
-
-    private bool _make;
+    private int _distance;
+    [BsonElement("make")]
     public bool Make { get => _make; set => _make = value; }
+    private bool _make;
 
-    private int _quarter;
+    [BsonElement("quarter")]
     public int Quater { get => _quarter; set => _quarter = value; }
+    private int _quarter;
 
-    private double _clock;
+    [BsonElement("clock")]
     public double Clock { get => _clock; set => _clock = value; }
+    private double _clock;
 
-    private DateOnly _date;
-    public DateOnly Date { get => _date; set => _date = value; }
+    [BsonElement("date")]
+    public DateTime Date { get => _date; set => _date = value; }
+    private DateTime _date;
 
-    private bool _assisted;
+    [BsonElement("assisted")]
     public bool Assisted { get => _assisted; set => _assisted = value; }
+    private bool _assisted;
 
-    private string? _assistor;
+    [BsonElement("assistor")]
     public string? Assistor { get => _assistor; set => _assistor = value; }
+    private string? _assistor;
 
     public Shot(
         int top, int left, int distance,
         bool make,
         int quarter, double clock,
-        DateOnly date,
+        DateTime date,
         bool assisted, string assistor
     ) {
         _top = top;
