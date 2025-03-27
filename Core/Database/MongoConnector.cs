@@ -11,12 +11,12 @@ public class MongoConnector : IMongoConnector {
 
     public MongoConnector(IConfiguration configuration) {
         IConfigurationSection dbConnectionSettings = configuration.GetSection(DatabaseConnectionSettings);
-        settings = new() {
+        /*settings = new() {
             Scheme = dbConnectionSettings.GetValue<string>("Scheme").Equals("mongodb") ? 
                 ConnectionStringScheme.MongoDB : 
                 ConnectionStringScheme.MongoDBPlusSrv,
             Server = new MongoServerAddress(
-                dbConnectionSettings.GetValue<string>("SeverAddress"), 
+                dbConnectionSettings.GetValue<string>("ServerAddress"), 
                 dbConnectionSettings.GetValue<int>("ServerPort")),
             ConnectTimeout = new TimeSpan(0,0,dbConnectionSettings.GetValue<int>("ConnectionTimeoutSeconds")),
             UseTls = dbConnectionSettings.GetValue<bool>("UseTls"),
@@ -25,6 +25,8 @@ public class MongoConnector : IMongoConnector {
             ApplicationName = dbConnectionSettings.GetValue<string>("ApplicationName")
         };
         mongoClient = new MongoClient(settings);
+        */
+        mongoClient = new MongoClient(dbConnectionSettings.GetValue<string>("ConnectionString"));
     }
     
     public MongoClientSettings GetSettings() {
