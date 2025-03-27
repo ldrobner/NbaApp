@@ -1,7 +1,5 @@
 using System.Text.RegularExpressions;
 using MongoDB.Driver;
-using MongoDB.Driver.Core.Configuration;
-using NbaApp.Core.Tools;
 
 namespace NbaApp.Core.Database;
 
