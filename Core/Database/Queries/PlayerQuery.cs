@@ -1,11 +1,12 @@
 using MongoDB.Driver;
 using NbaApp.Core.Types;
+using NbaApp.Core.Types.ShotCharts;
 using NbaApp.Core.Types.Statistics;
 
 namespace NbaApp.Core.Database.Queries;
 
 public class PlayerQuery : Query {
-    public PlayerQuery(MongoConnector mongoConnector, string? databaseName) : base (mongoConnector, databaseName) {}
+    public PlayerQuery(MongoConnector mongoConnector, string databaseName) : base (mongoConnector, databaseName) {}
 
     public List<Player> GetPlayers() {
         FilterDefinition<Player> filter = Builders<Player>.Filter.Empty;
@@ -14,9 +15,16 @@ public class PlayerQuery : Query {
     }
 
     public Player GetPlayerById(string playerId) {
-        FilterDefinition<Player> filter = Builders<Player>.Filter.Eq("id", playerId);
+        FilterDefinition<Player> filter = Builders<Player>.Filter.Eq("PlayerId", playerId);
         IMongoCollection<Player> collection = mongoConnector.GetCollection<Player>(Database, "players");
         return collection.Find(filter).FirstOrDefault();
+    }
+
+    public List<Player> GetPlayerByName(string fname, string lname) {
+        FilterDefinitionBuilder<Player> builder = Builders<Player>.Filter;
+        FilterDefinition<Player> filter = builder.Eq("firstName", fname) & builder.Eq("lastName", lname);
+        IMongoCollection<Player> collection = mongoConnector.GetCollection<Player>(Database, "players");
+        return collection.Find(filter).ToList();
     }
 
     public List<BoxScore> GetBoxScoresByPlayerId(string playerId, DateOnly? start, DateOnly? end) {

@@ -1,0 +1,12 @@
+@model IEnumerable<NbaApp.Core.Types.Player>
+<ul>
+    @foreach (var player in Model) {
+        <li>
+            <h4></h4>
+            <p></p>
+            <p></p>
+            <p></p>
+            <a asp-controller="Player" asp-action="Index">Select</a>
+        </li>
+    }
+</ul>

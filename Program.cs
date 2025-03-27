@@ -1,7 +1,12 @@
+using NbaApp.Core.Database;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Create MongoConnector Singleton
+builder.Services.AddSingleton<MongoConnector>();
 
 var app = builder.Build();
 

@@ -1,0 +1,32 @@
+@model NbaApp.Core.Types.Player
+
+@{
+     void RenderPlayerInformation(NbaApp.Core.Types.Player player) {
+        string collegeName = player.College == null ? "N/A" : player.College;
+        string name = $"{player.FirstName} {player.LastName}";
+        string height = $"{Math.Floor(player.Height)}'{Math.Round(12 * (player.Height - Math.Floor(player.Height)))}\"";
+
+        string draftPick;
+        if(player.DraftPick == null) {
+            draftPick = "undrafted";
+        } else if(player.DraftPick < 30) {
+            draftPick = $"Round 1, Pick {player.DraftPick}";
+        } else {
+            draftPick = $"Round 2, Pick {player.DraftPick - 30}";
+        }
+        
+
+        <div class="Player-card">
+            <h4>@name</h4>
+            <p><strong>Height: </strong>@height, <strong>Weight: </strong>@player.Weight lbs</p>
+            <p><strong>Nationality: </strong>@player.Nationality</p>
+            <p><strong>College: </strong>@collegeName</p>
+            <p><strong>Draft: </strong>@draftPick</p>
+            <p><strong>Experience: </strong>@player.Experience</p>
+        </div>
+    }
+}
+
+@{
+    RenderPlayerInformation(Model);
+}

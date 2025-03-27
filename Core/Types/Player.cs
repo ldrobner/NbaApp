@@ -4,6 +4,7 @@ using NbaApp.Core.Types.Statistics;
 
 namespace NbaApp.Core.Types;
 
+[BsonIgnoreExtraElements]
 public class Player {
     [BsonElement("id")]
     public string PlayerId { get => _playerId; set => _playerId = value; }
@@ -26,8 +27,8 @@ public class Player {
     private double _weight;
 
     [BsonElement("birthday")]
-    public DateOnly Birthday { get => _birthday ; set => _birthday = value; }
-    private DateOnly _birthday;
+    public DateTime Birthday { get => _birthday ; set => _birthday = value; }
+    private DateTime _birthday;
 
     [BsonElement("nationality")]
     public string Nationality { get => _nationality; set => _nationality = value; }
@@ -55,7 +56,7 @@ public class Player {
         string playerId,
         string firstName, string lastName,
         double height, double weight,
-        DateOnly birthday,
+        DateTime birthday,
         string nationality, string? college,
         int? draftPick,
         int experience
